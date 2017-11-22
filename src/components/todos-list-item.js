@@ -1,5 +1,8 @@
 import React from 'react';
 
+// note that an object key value cannot be passed as props
+// id was passed from the todo-list file to the todo-list-item component
+
 class TodosListItem extends React.Component{
     constructor(props) {
         super(props);
@@ -9,9 +12,6 @@ class TodosListItem extends React.Component{
         };
     }
 
-    onEditClick() {
-        this.setState({ isEditing: true });
-    }
 
     onCancelClick() {
         this.setState({ isEditing: false });
@@ -20,14 +20,14 @@ class TodosListItem extends React.Component{
     onSaveClick(event) {
         event.preventDefault();
 
-        const oldTask = this.props.task;
+        const oldTask = this.props.id;
         const newTask = this.refs.editInput.value;
-        this.props.saveTask(oldTask, newTask);
+        this.props.saveTrial(oldTask, newTask);
         this.setState({ isEditing: false });
     }
 
     renderTaskSection() {
-        const { task, isCompleted } = this.props;
+        const { isCompleted } = this.props;
 
         const taskStyle = {
             color: isCompleted ? 'green' : 'red',
@@ -38,7 +38,7 @@ class TodosListItem extends React.Component{
             return (
                 <td>
                     <form onSubmit={this.onSaveClick.bind(this)}>
-                        <input type="text" defaultValue={this.props.task} ref="editInput" />
+                        <input type="text" defaultValue={this.props.trial} ref="editInput" />
                     </form>
                 </td>
             );
@@ -46,9 +46,9 @@ class TodosListItem extends React.Component{
 
         return (
             <td style={taskStyle}
-                onClick={this.props.toggleTask.bind(this, task)}
+                onClick={()=>this.props.toggleTrial(this.props.id)}
             >
-                {task}
+                {this.props.trial}
             </td>
         );
     }
@@ -66,7 +66,7 @@ class TodosListItem extends React.Component{
         return (
             <td>
                 <button onClick={this.onEditClick.bind(this)}>Edit</button>
-                <button onClick={this.props.deleteTask.bind(this, this.props.task)}>Delete</button>
+                <button onClick={()=> this.props.deleteFirebase(this.props.id)}>Delete</button>
             </td>
         );
     }
@@ -80,6 +80,9 @@ class TodosListItem extends React.Component{
         );
     }
 
+    onEditClick() {
+        this.setState({ isEditing: true });
+    }
 }
 
 export default TodosListItem;

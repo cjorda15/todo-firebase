@@ -4,8 +4,6 @@
 import React from "react";
 import firebase from 'firebase';
 
-
-
 class CreateTodo extends React.Component{
     constructor(props) {
         super(props);
@@ -18,40 +16,51 @@ class CreateTodo extends React.Component{
 
     handleCreate(ev){
         ev.preventDefault();
-
-        //the const below for createInput task and validate input is used to cache
-        // the following so that they can be validated
-
-        //this is the section that handles the posting to firebase
-        // var firebaseRef = firebase.database().ref('pop/arr1/trial' + key + "/trial").child('trial');
         var firebaseRef = firebase.database().ref('pop/arr5');
         const messageText = {
             trial: this.refs.createInput.value,
             isCompleted: false
         }
+        const validateInput = this.validateInput(messageText.trial);
+
+        if (validateInput) {
+            this.setState({ error: validateInput });
+            return;
+        }
+
         firebaseRef.push().set(messageText);
-        this.setState({messageText: ""});
+        this.setState({ error: null });
 
         this.refs.createInput.value = '';
         this.refs.createInput.focus();
     }
 
+    renderError() {
+        if (!this.state.error) { return null; }
 
-    //this.refs.createInput.value = ''; is used to clear out the form after logging in a todo.
+        return <div style={{ color: 'red' }}>{this.state.error}</div>;
+    }
 
     render(){
         return (
            <form onSubmit={this.handleCreate.bind(this)}>
                <input ref="createInput" type="text" placeholder="What do I need to do?" />
                <button>Create</button>
+               {this.renderError()}
            </form>
         );
+    }
+
+    validateInput(trial) {
+        console.log(this.props.items)
+        if (!trial) {
+            return 'Please enter a task.';
+        } else if (_.find(this.props.items, todo => todo.trial === trial)) {
+            return 'Task already exists.';
+        } else {
+            return null;
+        }
     }
 }
 
 export default CreateTodo;
-
-
-//create todo is defined in the app section and parsed create todo section
-// render takes the input and parse it on to the handle submit a
-//the input is being called for rendering in the app section

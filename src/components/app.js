@@ -3,17 +3,18 @@
  */
 import React from 'react';
 import CreateTodo from './create-todo';
-import firebase, {isString} from 'firebase';
-import _ from 'lodash';
+import firebase from 'firebase';
+import TodosList from "./todos-list";
 
+// Create a firebase db to store data, replace the db info in this tutorial with your firbase db info
 
 const config = {
-    apiKey: "AIzaSyDcx977w70ztgT8JtQSWR-EobmJJc7vBS0",
-    authDomain: "todo-list-3bd0b.firebaseapp.com",
-    databaseURL: "https://todo-list-3bd0b.firebaseio.com",
-    projectId: "todo-list-3bd0b",
-    storageBucket: "todo-list-3bd0b.appspot.com",
-    messagingSenderId: "128895753788"
+    apiKey: "AIzaSyDcxxxxxxxxtgT8JtQSWR-ExxxxxxvBS0",
+    authDomain: "todo-list-xxxxx.firebaseapp.com",
+    databaseURL: "https://todo-list-xxxxx.firebaseio.com",
+    projectId: "todo-list-xxxxx",
+    storageBucket: "todo-list-xxxxx.appspot.com",
+    messagingSenderId: "xxxxxxxxxxx"
 };
 firebase.initializeApp(config);
 
@@ -27,7 +28,7 @@ class App extends React.Component{
     }
 
     componentWillMount(){
-
+        //Created a child node pop with a sub child node arr5
         firebase.database().ref('/pop/arr5').on('value', (snapshot)=> {
             const items = snapshot.val();
             this.setState({
@@ -44,16 +45,23 @@ class App extends React.Component{
         const task = this.state.items[key];
         const foundItem = task;
         foundItem.isCompleted = !foundItem.isCompleted;
-
-        // firebase.database().ref('/pop/arr1/' + key).child('isCompleted').set(foundItem.isCompleted);
         firebase.database().ref().child('pop').child('arr5').child(key).update({isCompleted: foundItem.isCompleted});
         this.setState({
-            items: this.state.items
+            clicked: true
+        });
+    }
+
+    saveTrial (key, newTask) {
+        const foundTodo = this.state.items[key];
+        foundTodo.trial = newTask;
+        firebase.database().ref().child('pop').child('arr5').child(key).update({trial: foundTodo.trial});
+        this.setState({
+            clicked: true
         });
     }
 
     deleteFirebase(key){
-        console.log(key, 'KEY');
+        // passing a key value to identify node to be deleted
         firebase.database().ref('/pop/arr5/' + key ).remove()
             .then(function() {
                 console.log("Remove succeeded.")
@@ -62,28 +70,8 @@ class App extends React.Component{
                 console.log("Remove failed: " + error.message)
             });
         this.setState({
-            items: this.state.items
+            clicked: true
         });
-    }
-
-    renderTrial(){
-        const taskStyle = {
-
-            green: {
-                color: 'green',
-                cursor: 'pointer',
-            },
-            red: {
-                color: 'red',
-                cursor: 'pointer',
-            }
-        };
-
-        return _.map(this.state.items, (message, key) => <div key={key}
-                                                              style={message.isCompleted ? taskStyle.green  : taskStyle.red}
-                                                              onClick={()=>this.toggleTrial(key)}>
-                                                                { message.trial }
-            <button onClick={()=> this.deleteFirebase(key)}>Delete</button> </div>);
     }
 
 
@@ -92,10 +80,11 @@ class App extends React.Component{
             <div>
 
                 <h1>React ToDos App</h1>
-                <CreateTodo />
-                <div>
-                    {this.renderTrial()}
-                </div>
+                <CreateTodo items={this.state.items} />
+                <TodosList items={this.state.items}
+                            deleteFirebase={this.deleteFirebase.bind(this)}
+                            toggleTrial={this.toggleTrial.bind(this)}
+                            saveTrial={this.saveTrial.bind(this)}/>
             </div>
         );
     }
