@@ -10,12 +10,12 @@ import {Collection} from 'react-materialize'
 // Create a firebase db to store data, replace the db info in this tutorial with your firbase db info
 
 const config = {
-    apiKey: "AIzaSyDcx977w70ztgT8JtQSWR-EobmJJc7vBS0",
-    authDomain: "todo-list-3bd0b.firebaseapp.com",
-    databaseURL: "https://todo-list-3bd0b.firebaseio.com",
-    projectId: "todo-list-3bd0b",
-    storageBucket: "todo-list-3bd0b.appspot.com",
-    messagingSenderId: "128895753788"
+    apiKey: "AIzaSyBmL1q2aDX_U4Ai_axqUh4iaGfFCvPbvfw",
+    authDomain: "todo-list-f911d.firebaseapp.com",
+    databaseURL: "https://todo-list-f911d.firebaseio.com",
+    projectId: "todo-list-f911d",
+    storageBucket: "todo-list-f911d.appspot.com",
+    messagingSenderId: "260866467960"
 };
 firebase.initializeApp(config);
 
