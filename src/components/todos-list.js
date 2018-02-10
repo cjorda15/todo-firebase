@@ -5,6 +5,7 @@ import _ from 'lodash';
 import React from 'react';
 import TodosListHeader from './todos-list-header';
 import TodosListItem from './todos-list-item'
+import {Table} from "react-materialize";
 
 class TodosList extends React.Component{
     renderItems() {
@@ -14,12 +15,12 @@ class TodosList extends React.Component{
 
     render() {
         return (
-            <table>
+            <Table>
                 <TodosListHeader />
-                <tbody>
-                {this.renderItems()}
-                </tbody>
-            </table>
+                    <tbody>
+                        {this.renderItems()}
+                    </tbody>
+            </Table>
         );
     }
 }

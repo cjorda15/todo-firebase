@@ -9,8 +9,9 @@ class TodoListHeader extends React.Component{
 
             <thead>
                 <tr>
-                    <th>Task</th>
-                    <th>Actions!</th>
+                    <th>#</th>
+                    <th>Items</th>
+                    <th>Status</th>
                 </tr>
             </thead>
 

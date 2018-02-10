@@ -5,16 +5,17 @@ import React from 'react';
 import CreateTodo from './create-todo';
 import firebase from 'firebase';
 import TodosList from "./todos-list";
+import {Collection} from 'react-materialize'
 
 // Create a firebase db to store data, replace the db info in this tutorial with your firbase db info
 
 const config = {
-    apiKey: "AIzaSyDcxxxxxxxxtgT8JtQSWR-ExxxxxxvBS0",
-    authDomain: "todo-list-xxxxx.firebaseapp.com",
-    databaseURL: "https://todo-list-xxxxx.firebaseio.com",
-    projectId: "todo-list-xxxxx",
-    storageBucket: "todo-list-xxxxx.appspot.com",
-    messagingSenderId: "xxxxxxxxxxx"
+    apiKey: "AIzaSyDcx977w70ztgT8JtQSWR-EobmJJc7vBS0",
+    authDomain: "todo-list-3bd0b.firebaseapp.com",
+    databaseURL: "https://todo-list-3bd0b.firebaseio.com",
+    projectId: "todo-list-3bd0b",
+    storageBucket: "todo-list-3bd0b.appspot.com",
+    messagingSenderId: "128895753788"
 };
 firebase.initializeApp(config);
 
@@ -23,16 +24,16 @@ class App extends React.Component{
         super(props);
 
         this.state = {
-            items: [],
+            items: []
         };
     }
 
     componentWillMount(){
-        //Created a child node pop with a sub child node arr5
         firebase.database().ref('/pop/arr5').on('value', (snapshot)=> {
             const items = snapshot.val();
             this.setState({
-                items: items
+                items: items,
+                checked: true,
             });
         });
     }
@@ -61,30 +62,34 @@ class App extends React.Component{
     }
 
     deleteFirebase(key){
-        // passing a key value to identify node to be deleted
-        firebase.database().ref('/pop/arr5/' + key ).remove()
-            .then(function() {
-                console.log("Remove succeeded.")
-            })
-            .catch(function(error) {
-                console.log("Remove failed: " + error.message)
+        console.log(this.state.items[key].trial, 'trial');
+        if (confirm("Delete Todo task " + this.state.items[key].trial + "?")) {
+            return (firebase.database().ref('/pop/arr5/' + key ).remove()
+                .then(() =>{
+                    console.log("Remove succeeded.")
+                })
+                .catch((error) =>{
+                    console.log("Remove failed: " + error.message)
+                }));
+            //noinspection UnreachableCodeJS
+            this.setState({
+                clicked: true
             });
-        this.setState({
-            clicked: true
-        });
-    }
-
+            return false;
+    }}
 
     render() {
+        // console.log(this.state.items);
         return (
-            <div>
-
-                <h1>React ToDos App</h1>
+            <div className="body">
+                <h2>Todo App</h2>
                 <CreateTodo items={this.state.items} />
-                <TodosList items={this.state.items}
-                            deleteFirebase={this.deleteFirebase.bind(this)}
-                            toggleTrial={this.toggleTrial.bind(this)}
-                            saveTrial={this.saveTrial.bind(this)}/>
+                <Collection>
+                    <TodosList items={this.state.items}
+                               deleteFirebase={this.deleteFirebase.bind(this)}
+                               toggleTrial={this.toggleTrial.bind(this)}
+                               saveTrial={this.saveTrial.bind(this)}/>
+                </Collection>
             </div>
         );
     }

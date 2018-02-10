@@ -3,6 +3,8 @@
  */
 import React from "react";
 import firebase from 'firebase';
+import {Button, Icon} from "react-materialize";
+import '../css/style.css';
 
 class CreateTodo extends React.Component{
     constructor(props) {
@@ -16,11 +18,11 @@ class CreateTodo extends React.Component{
 
     handleCreate(ev){
         ev.preventDefault();
-        var firebaseRef = firebase.database().ref('pop/arr5');
+        let firebaseRef = firebase.database().ref('pop/arr5');
         const messageText = {
             trial: this.refs.createInput.value,
             isCompleted: false
-        }
+        };
         const validateInput = this.validateInput(messageText.trial);
 
         if (validateInput) {
@@ -43,16 +45,30 @@ class CreateTodo extends React.Component{
 
     render(){
         return (
-           <form onSubmit={this.handleCreate.bind(this)}>
-               <input ref="createInput" type="text" placeholder="What do I need to do?" />
-               <button>Create</button>
-               {this.renderError()}
-           </form>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <form >
+                                <input ref="createInput" type="text" placeholder="What do I need to do?" />
+
+                            </form>
+                        </td>
+                        <td>
+                            <Button onClick={this.handleCreate.bind(this)}><Icon large>save</Icon></Button>
+                        </td>
+                        <td>
+                            {this.renderError()}
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+
         );
     }
 
     validateInput(trial) {
-        console.log(this.props.items)
         if (!trial) {
             return 'Please enter a task.';
         } else if (_.find(this.props.items, todo => todo.trial === trial)) {

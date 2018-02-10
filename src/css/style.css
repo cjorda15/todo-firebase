@@ -1,0 +1,14 @@
+.floater{
+    float: right;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.body {
+    align: center;
+    width: 600px;
+    height: 800px;
+    padding: 50px;
+}
